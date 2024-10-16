@@ -33,17 +33,28 @@ Run the optimization problem.
 - `savefile`: Whether or not to save all the control coeffients. 
 
 """
-function run(opt::AbstractOpt, alg::AbstractAlgorithm, obj::AbstractObj, dynamics::AbstractDynamics; savefile::Bool=false)
-    output = Output(opt; save=savefile)
+function run(
+    opt::AbstractOpt,
+    alg::AbstractAlgorithm,
+    obj::AbstractObj,
+    dynamics::AbstractDynamics;
+    savefile::Bool = false,
+)
+    output = Output(opt; save = savefile)
     obj = Objective(dynamics, obj)
 
     if obj isa HCRB_obj
         if alg isa AD || alg isa AD_Adam
             println("AD is not available when the objective function is HCRB.")
-        elseif alg isa GRAPE || alg isa GRAPE_Adam || alg isa autoGRAPE || alg isa autoGRAPE_Adam
+        elseif alg isa GRAPE ||
+               alg isa GRAPE_Adam ||
+               alg isa autoGRAPE ||
+               alg isa autoGRAPE_Adam
             println("GRAPE is not available when the objective function is HCRB.")
         elseif obj isa HCRB_obj{single_para}
-            println("Program exit. In the single-parameter scenario, the HCRB is equivalent to the QFI. Please choose 'QFIM_obj()' as the objective function.")
+            println(
+                "Program exit. In the single-parameter scenario, the HCRB is equivalent to the QFI. Please choose 'QFIM_obj()' as the objective function.",
+            )
         else
             system = QuanEstSystem(opt, alg, obj, dynamics, output)
             run(system)
@@ -69,8 +80,16 @@ Search of the minimum time to reach a given value of the objective function.
 
 - `system`: control system.
 """
-function mintime(f::Number, opt::ControlOpt, alg::AbstractAlgorithm, obj::AbstractObj, dynamics::AbstractDynamics;savefile::Bool=false, method::String="binary")
-    output = Output(opt; save=savefile)
+function mintime(
+    f::Number,
+    opt::ControlOpt,
+    alg::AbstractAlgorithm,
+    obj::AbstractObj,
+    dynamics::AbstractDynamics;
+    savefile::Bool = false,
+    method::String = "binary",
+)
+    output = Output(opt; save = savefile)
     obj = Objective(dynamics, obj)
     system = QuanEstSystem(opt, alg, obj, dynamics, output)
     mintime(method, f, system)

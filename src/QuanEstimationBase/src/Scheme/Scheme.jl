@@ -1,9 +1,9 @@
 abstract type AbstractScheme end
 struct Scheme{S,P,M,E} <: AbstractScheme
-	StatePreparation
-	Parameterization
-	Measurement
-	EstimationStrategy
+    StatePreparation::Any
+    Parameterization::Any
+    Measurement::Any
+    EstimationStrategy::Any
 end
 
 include("StatePreparation/StatePreparation.jl")
@@ -14,24 +14,24 @@ include("error_evaluation.jl")
 include("error_control.jl")
 
 function Scheme(state::GeneralState{S}, param::P, meas::M, strat::E) where {S,P,M,E}
-	return Scheme{S,P,M,E}(state, param, meas, strat)
+    return Scheme{S,P,M,E}(state, param, meas, strat)
 end
 
 function GeneralScheme(;
-	probe=nothing,
-	param=nothing,
-	measurement=nothing,
-	strat=nothing,
-	x=nothing,
-	p=nothing,
-	dp=nothing,
+    probe = nothing,
+    param = nothing,
+    measurement = nothing,
+    strat = nothing,
+    x = nothing,
+    p = nothing,
+    dp = nothing,
 )
-	return Scheme(
-		GeneralState(probe),
-		param,
-		GeneralMeasurement(measurement),
-		isnothing(strat) ? GeneralEstimation(x,p,dp) : strat,
-	)
+    return Scheme(
+        GeneralState(probe),
+        param,
+        GeneralMeasurement(measurement),
+        isnothing(strat) ? GeneralEstimation(x, p, dp) : strat,
+    )
 end
 
 
