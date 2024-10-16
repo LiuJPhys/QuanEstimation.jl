@@ -4,9 +4,9 @@ abstract type AbstractDynamics <: AbstractParameterization end
 
 abstract type AbstractDynamicsData end
 
-mutable struct Lindblad{H, D, C, S, P} <: AbstractDynamics
+mutable struct Lindblad{H,D,C,S,P} <: AbstractDynamics
     data::AbstractDynamicsData
-    params::Union{Nothing, AbstractVector}
+    params::Union{Nothing,AbstractVector}
 end
 
 # Lindblad(data::D) where D = Lindblad{D}(data, nothing)
